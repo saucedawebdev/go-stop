@@ -1,25 +1,31 @@
 /**
  * GoStop Service Worker
  * Offline-first caching for all app assets.
+ * Paths resolve relative to this script so the app works on GitHub Pages subpaths.
  */
 
-const CACHE_NAME = 'gostop-v1';
+const CACHE_NAME = 'gostop-v2';
+
+/** Resolve a path relative to the service worker script location. */
+function asset(path) {
+  return new URL(path.replace(/^\.\//, ''), self.location.href).href;
+}
 
 /** All assets to precache for offline use */
 const PRECACHE_ASSETS = [
-  './',
-  './index.html',
-  './styles.css',
-  './app.js',
-  './manifest.webmanifest',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-512-maskable.png',
-  './icons/icon-1024.png',
-  './icons/icon-180.png',
-  './icons/apple-touch-icon.png',
-  './icons/favicon-32.png',
-  './icons/favicon-16.png',
+  asset('./'),
+  asset('./index.html'),
+  asset('./styles.css'),
+  asset('./app.js'),
+  asset('./manifest.webmanifest'),
+  asset('./icons/icon-192.png'),
+  asset('./icons/icon-512.png'),
+  asset('./icons/icon-512-maskable.png'),
+  asset('./icons/icon-1024.png'),
+  asset('./icons/icon-180.png'),
+  asset('./icons/apple-touch-icon.png'),
+  asset('./icons/favicon-32.png'),
+  asset('./icons/favicon-16.png'),
 ];
 
 /**
