@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="description" content="GoStop — A simple visual cue card for GO and STOP communication.">
+  <meta name="theme-color" content="#34C759">
+  <meta name="color-scheme" content="light dark">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="GoStop">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="format-detection" content="telephone=no">
+
+  <title>GoStop</title>
+
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/favicon-16.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+</head>
+<body>
+  <main
+    id="app"
+    class="app"
+    role="button"
+    tabindex="0"
+    aria-label="Cue card showing GO. Tap, press Space, or press Enter to flip to STOP."
+    aria-pressed="false"
+  >
+    <div class="card-scene" aria-hidden="true">
+      <div class="card" id="card">
+        <div class="card-face card-face--front">
+          <span class="card-text" aria-hidden="true">GO</span>
+        </div>
+        <div class="card-face card-face--back">
+          <span class="card-text" aria-hidden="true">STOP</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Screen reader live region for state announcements -->
+    <div
+      id="sr-announce"
+      class="sr-only"
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+    ></div>
+  </main>
+
+  <noscript>
+    <div class="noscript">
+      <p>GoStop requires JavaScript to flip between GO and STOP.</p>
+    </div>
+  </noscript>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,245 @@
+/* ==========================================================================
+   GoStop — Visual Cue Card PWA
+   Mobile-first, Apple-inspired, accessibility-focused styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Design tokens
+   -------------------------------------------------------------------------- */
+:root {
+  --color-go: #34c759;
+  --color-stop: #ff3b30;
+  --color-text: #ffffff;
+  --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text",
+    system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --flip-duration: 450ms;
+  --flip-easing: cubic-bezier(0.4, 0.0, 0.2, 1);
+  --fade-duration: 300ms;
+
+  /* Fluid typography: scales from small phones to iPad */
+  --text-size: clamp(4.5rem, 22vw + 1rem, 14rem);
+  --text-weight: 700;
+  --text-tracking: 0.04em;
+
+  color-scheme: light dark;
+}
+
+/* Dark mode: slightly deeper tones for OLED comfort */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-go: #30d158;
+    --color-stop: #ff453a;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reset & native-feel constraints
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: var(--font-stack);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   Accessibility utilities
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   App shell
+   -------------------------------------------------------------------------- */
+.app {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-go);
+  cursor: pointer;
+  outline: none;
+
+  /* Safe area insets for notched iPhones and Dynamic Island */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+}
+
+.app:focus-visible {
+  outline: 3px solid rgba(255, 255, 255, 0.6);
+  outline-offset: -6px;
+}
+
+.app--stop {
+  background-color: var(--color-stop);
+}
+
+.app--animating {
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   3D card scene
+   -------------------------------------------------------------------------- */
+.card-scene {
+  position: absolute;
+  inset: 0;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+}
+
+.card {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transition: transform var(--flip-duration) var(--flip-easing);
+}
+
+.card--flipped {
+  transform: rotateY(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   Card faces
+   -------------------------------------------------------------------------- */
+.card-face {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-face--front {
+  background-color: var(--color-go);
+}
+
+.card-face--back {
+  background-color: var(--color-stop);
+  transform: rotateY(180deg);
+}
+
+/* --------------------------------------------------------------------------
+   Typography
+   -------------------------------------------------------------------------- */
+.card-text {
+  color: var(--color-text);
+  font-family: var(--font-stack);
+  font-size: var(--text-size);
+  font-weight: var(--text-weight);
+  letter-spacing: var(--text-tracking);
+  line-height: 1;
+  text-align: center;
+  pointer-events: none;
+
+  /* Support Dynamic Type on iOS via max() with env() fallback */
+  font-size: max(var(--text-size), 1rem);
+}
+
+/* Landscape: slightly reduce scale to avoid clipping */
+@media (orientation: landscape) and (max-height: 500px) {
+  :root {
+    --text-size: clamp(3rem, 18vh + 0.5rem, 8rem);
+  }
+}
+
+/* iPad and larger screens */
+@media (min-width: 768px) {
+  :root {
+    --text-size: clamp(6rem, 18vw, 16rem);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion: fade transition instead of 3D flip
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .card-scene {
+    perspective: none;
+  }
+
+  .card {
+    transform: none !important;
+    transition: opacity var(--fade-duration) ease;
+  }
+
+  .card-face {
+    backface-visibility: visible;
+    -webkit-backface-visibility: visible;
+    transition: opacity var(--fade-duration) ease;
+  }
+
+  .card-face--front {
+    opacity: 1;
+  }
+
+  .card-face--back {
+    transform: none;
+    opacity: 0;
+  }
+
+  .card--flipped .card-face--front {
+    opacity: 0;
+  }
+
+  .card--flipped .card-face--back {
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Noscript fallback
+   -------------------------------------------------------------------------- */
+.noscript {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-go);
+  color: var(--color-text);
+  font-family: var(--font-stack);
+  font-size: 1.25rem;
+  padding: 2rem;
+  text-align: center;
+}
